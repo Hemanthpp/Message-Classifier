@@ -18,7 +18,7 @@ from pathlib import Path
 # Ensure backend/ is in path when run from project root
 sys.path.insert(0, str(Path(__file__).parent))
 
-from classifier import classify_message, train_tfidf_on_dataset, get_ml_insights, CAT_ACTION, CAT_MEETING
+from classifier import classify_message, train_tfidf_on_dataset, CAT_ACTION, CAT_MEETING
 from extractor import extract_item, reset_counter
 from sensitive_detector import detect_sensitive
 
@@ -135,55 +135,34 @@ def run_pipeline(csv_path: str):
 
     # Load
     print("[1/5] Loading messages…")
-    t0_total = time.time()
-    t0_load = time.time()
     messages = load_messages(csv_path)
-    t_load = time.time() - t0_load
 
     # Classify (rule-based)
     print("[2/5] Classifying messages (rule-based)…")
-    t0_rule = time.time()
+    t0 = time.time()
     classifications = stage1_classify(messages)
-    t_rule = time.time() - t0_rule
-    print(f"  Done in {t_rule:.2f}s")
+    print(f"  Done in {time.time() - t0:.2f}s")
 
     # Classify (TF-IDF refinement)
     print("[3/5] Refining with TF-IDF model…")
-    t0_ml = time.time()
+    t0 = time.time()
     classifications = stage2_train_and_reclassify(messages, classifications)
-    t_ml = time.time() - t0_ml
-    print(f"  Done in {t_ml:.2f}s")
+    print(f"  Done in {time.time() - t0:.2f}s")
 
     # Extract tasks/events
     print("[4/5] Extracting tasks and events…")
-    t0_extract = time.time()
+    t0 = time.time()
     tasks_events = stage3_extract(messages, classifications)
-    t_extract = time.time() - t0_extract
-    print(f"  Extracted {len(tasks_events)} items in {t_extract:.2f}s")
+    print(f"  Extracted {len(tasks_events)} items in {time.time() - t0:.2f}s")
 
     # Detect sensitive
     print("[5/5] Detecting sensitive information…")
-    t0_sens = time.time()
+    t0 = time.time()
     sensitive = stage4_detect_sensitive(messages)
-    t_sens = time.time() - t0_sens
-    print(f"  Detected {len(sensitive)} sensitive messages in {t_sens:.2f}s")
-
-    t_total = time.time() - t0_total
-    
-    telemetry = {
-        "load_time_ms": round(t_load * 1000, 2),
-        "rule_classify_time_ms": round(t_rule * 1000, 2),
-        "ml_refine_time_ms": round(t_ml * 1000, 2),
-        "extract_time_ms": round(t_extract * 1000, 2),
-        "sensitive_detect_time_ms": round(t_sens * 1000, 2),
-        "total_pipeline_time_ms": round(t_total * 1000, 2),
-        "messages_per_second": round(len(messages) / t_total, 1) if t_total > 0 else 0
-    }
+    print(f"  Detected {len(sensitive)} sensitive messages in {time.time() - t0:.2f}s")
 
     # Compute stats
     stats = compute_stats(classifications, tasks_events, sensitive)
-    stats["telemetry"] = telemetry
-    stats["ml_insights"] = get_ml_insights()
 
     # Write outputs
     out_cls  = OUTPUT_DIR / "classifications.json"

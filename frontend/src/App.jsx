@@ -8,9 +8,12 @@ import ClassificationView from './components/ClassificationView';
 import TasksEventsView from './components/TasksEventsView';
 import SensitiveView from './components/SensitiveView';
 import MandatoryPanel from './components/MandatoryPanel';
+import Playground from './components/Playground';
+import { Play } from 'lucide-react';
 
 const NAV = [
   { id: 'dashboard',       label: 'Overview',         icon: LayoutDashboard },
+  { id: 'playground',      label: 'Playground',       icon: Play },
   { id: 'classifications', label: 'Classifications',   icon: Tag },
   { id: 'tasks',           label: 'Tasks & Events',    icon: Calendar },
   { id: 'sensitive',       label: 'Sensitive',         icon: ShieldAlert },
@@ -20,6 +23,7 @@ const NAV = [
 function renderPage(active) {
   switch (active) {
     case 'dashboard':       return <Dashboard />;
+    case 'playground':      return <Playground />;
     case 'classifications': return <ClassificationView />;
     case 'tasks':           return <TasksEventsView />;
     case 'sensitive':       return <SensitiveView />;

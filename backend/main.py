@@ -12,6 +12,11 @@ from typing import Optional
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from pydantic import BaseModel
+
+from classifier import classify_message
+from extractor import extract_item
+from sensitive_detector import detect_sensitive
 
 # ──────────────────────────────────────────────────────────────
 # Load pre-computed data at startup
@@ -74,7 +79,7 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_methods=["GET"],
+    allow_methods=["*"],
     allow_headers=["*"],
 )
 
@@ -207,3 +212,34 @@ def search(
     start = (page - 1) * page_size
     page_data = data[start : start + page_size]
     return {"total": total, "page": page, "page_size": page_size, "data": page_data}
+
+
+class AnalyzeRequest(BaseModel):
+    message: str
+
+@app.post("/api/analyze")
+def analyze_message(req: AnalyzeRequest):
+    msg_id = "LIVE_TEST"
+    sender = "Playground"
+    text = req.message
+    
+    # 1. Classify
+    classification = classify_message(msg_id, sender, text)
+    
+    # 2. Detect Sensitive
+    sensitive = detect_sensitive(msg_id, text)
+    
+    # 3. Extract Tasks/Events
+    tasks_events = []
+    if classification["category"] in ("action_required", "meeting_or_event"):
+        item = extract_item(msg_id, sender, text, classification["category"])
+        if item:
+            tasks_events.append(item)
+            
+    return {
+        "message_id": msg_id,
+        "classification": classification,
+        "sensitive": sensitive,
+        "tasks_events": tasks_events
+    }
+

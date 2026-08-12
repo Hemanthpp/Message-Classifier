@@ -170,18 +170,15 @@ def _rule_based_classify(sender: str, text: str) -> Tuple[str, float, str]:
 _model = None
 _vectorizer = None
 _label_map = None
-_ml_insights = None
 
 
 def _build_tfidf_model(messages: list):
-    """Train TF-IDF + Logistic Regression on a labeled sample with cross-validation."""
-    global _model, _vectorizer, _label_map, _ml_insights
+    """Train TF-IDF + Logistic Regression on a labeled sample."""
+    global _model, _vectorizer, _label_map
 
     from sklearn.feature_extraction.text import TfidfVectorizer
     from sklearn.linear_model import LogisticRegression
     from sklearn.preprocessing import LabelEncoder
-    from sklearn.model_selection import train_test_split
-    from sklearn.metrics import classification_report
     import numpy as np
 
     texts = [m["message"] for m in messages]
@@ -190,48 +187,16 @@ def _build_tfidf_model(messages: list):
     enc = LabelEncoder()
     y = enc.fit_transform(labels)
 
-    # 80/20 train/test split for rigorous evaluation
-    X_text_train, X_text_test, y_train, y_test = train_test_split(texts, y, test_size=0.2, random_state=42)
-
     vec = TfidfVectorizer(ngram_range=(1, 2), max_features=5000, sublinear_tf=True)
-    X_train = vec.fit_transform(X_text_train)
-    X_test = vec.transform(X_text_test)
+    X = vec.fit_transform(texts)
 
     clf = LogisticRegression(max_iter=1000, C=5.0, solver="lbfgs")
-    clf.fit(X_train, y_train)
-
-    # Evaluate
-    y_pred = clf.predict(X_test)
-    class_names = enc.classes_
-    report = classification_report(y_test, y_pred, target_names=class_names, output_dict=True, zero_division=0)
-    
-    # Extract Feature Importances (XAI)
-    feature_names = vec.get_feature_names_out()
-    feature_importances = {}
-    for i, class_name in enumerate(class_names):
-        coefs = clf.coef_[i]
-        top_indices = np.argsort(coefs)[-10:][::-1]
-        top_features = [{"term": feature_names[idx], "weight": float(coefs[idx])} for idx in top_indices]
-        feature_importances[class_name] = top_features
-
-    # Save to insights
-    _ml_insights = {
-        "metrics": {
-            "accuracy": report["accuracy"],
-            "macro_avg": report["macro avg"],
-            "weighted_avg": report["weighted avg"]
-        },
-        "feature_importances": feature_importances
-    }
+    clf.fit(X, y)
 
     _model = clf
     _vectorizer = vec
     _label_map = enc
 
-
-def get_ml_insights() -> dict:
-    """Returns the ML evaluation metrics and XAI feature importances."""
-    return _ml_insights
 
 def _tfidf_classify(text: str) -> Tuple[str, float, str]:
     """Use trained TF-IDF model for ambiguous classification."""
