@@ -1,0 +1,11 @@
+.env
+*.pyc
+__pycache__/
+backend/output/*.json
+# DO NOT commit the dataset
+messages.csv
+L1_Candidate_Dataset/
+*.csv
+node_modules/
+dist/
+.vite/
