@@ -2,8 +2,8 @@
 
 > AI/ML Intern Assignment — Message Classification, Task Extraction & Sensitive Information Detection
 
-**Live Demo:** `https://<YOUR-VERCEL-URL>.vercel.app`  
-**API / Backend:** `https://message-classifier-gg9w.onrender.com`
+**Live Demo:** `https://message-classifier-nine.vercel.app/`  
+**API / Backend:** `https://message-classifier-gg9w.onrender.com`  
 **Video Walkthrough:** `[Link to your Loom Video]`
 
 ---
