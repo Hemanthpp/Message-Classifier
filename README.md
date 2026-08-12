@@ -170,12 +170,6 @@ A priority-ordered list of regex patterns scans every message:
 
 ---
 
-## AI Tool Usage Declaration
-
-> This system was built with assistance from **Google Antigravity (Gemini)** as a pair-programming AI coding assistant for code scaffolding, component structure, and debugging. All classification logic, regex patterns, masking rules, and architectural decisions were reviewed, understood, and approved by the developer. The system processes messages entirely locally using Python standard libraries and scikit-learn — no raw messages are sent to any external AI service.
-
----
-
 ## Running Locally
 
 ### 1. Install Python (3.10+)
