@@ -1,0 +1,24 @@
+{
+  "total_messages": 900,
+  "total_tasks_events": 350,
+  "total_sensitive": 150,
+  "avg_confidence": 0.9035,
+  "categories": {
+    "meeting_or_event": 170,
+    "action_required": 237,
+    "general_information": 243,
+    "sensitive_information": 141,
+    "promotional": 100,
+    "personal_information": 9
+  },
+  "task_event_types": {
+    "event": 140,
+    "task": 210
+  },
+  "sensitivity_risks": {
+    "medium": 30,
+    "low": 60,
+    "critical": 20,
+    "high": 40
+  }
+}
