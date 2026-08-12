@@ -6,27 +6,27 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
 :root {
-  /* Core palette — near-black with warm undertone */
-  --bg:           #0e0e10;
-  --surface-0:    #111113;
-  --surface-1:    #18181b;
-  --surface-2:    #1f1f23;
-  --surface-3:    #27272b;
-  --surface-hover:#2e2e33;
+  /* Core palette — midnight teal */
+  --bg:           #080c10;
+  --surface-0:    #0b1116;
+  --surface-1:    #11181f;
+  --surface-2:    #172029;
+  --surface-3:    #1e2935;
+  --surface-hover:#243241;
 
   /* Borders */
-  --line:         rgba(255,255,255,0.07);
+  --line:         rgba(255,255,255,0.06);
   --line-strong:  rgba(255,255,255,0.12);
 
   /* Text */
-  --t1: #ececec;
-  --t2: #8c8c96;
-  --t3: #52525a;
+  --t1: #edf2f7;
+  --t2: #94a3b8;
+  --t3: #475569;
 
-  /* Single accent — electric indigo */
-  --accent:       #7c6eff;
-  --accent-dim:   rgba(124,110,255,0.12);
-  --accent-border:rgba(124,110,255,0.3);
+  /* Single accent — neon mint */
+  --accent:       #10b981;
+  --accent-dim:   rgba(16,185,129,0.12);
+  --accent-border:rgba(16,185,129,0.3);
 
   /* Semantic colours (muted, used sparingly) */
   --green:  #22c55e;
