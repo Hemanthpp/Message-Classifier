@@ -4,7 +4,7 @@
 
 **Live Demo:** `https://message-classifier-nine.vercel.app/`  
 **API / Backend:** `https://message-classifier-gg9w.onrender.com`  
-**Video Walkthrough:** `[Link to your Loom Video]`
+**Video Walkthrough:** `https://www.loom.com/share/f79d924abb604a749b44812ca8ae4379`
 
 ---
 
